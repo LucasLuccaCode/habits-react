@@ -1,8 +1,12 @@
+import { useQuery } from "@tanstack/react-query"
+import { api } from "../services/api"
 import { generateDatesFromYearBeginning } from "../utils/generate-dates-from-year-beginning"
 import { HabitDay } from "./HabitDay"
 
 
 export function SummaryTable() {
+  const { data: habits} = useQuery(['summary'], () => api.get('/summary'))
+
   const weekDays = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
 
   const summaryDates = generateDatesFromYearBeginning()
