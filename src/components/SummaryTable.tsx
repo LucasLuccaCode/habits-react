@@ -1,11 +1,17 @@
-import { useQuery } from "@tanstack/react-query"
-import { api } from "../services/api"
+import dayjs from "dayjs";
 import { generateDatesFromYearBeginning } from "../utils/generate-dates-from-year-beginning"
 import { HabitDay } from "./HabitDay"
 
+interface SummaryTableProps {
+  summary: {
+    id: string;
+    date: string;
+    completed: number;
+    amount: number;
+  }[]
+}
 
-export function SummaryTable() {
-  const { data: habits} = useQuery(['summary'], () => api.get('/summary'))
+export function SummaryTable({ summary }: SummaryTableProps) {
 
   const weekDays = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
 
@@ -30,13 +36,21 @@ export function SummaryTable() {
       <div className="grid grid-rows-7 grid-flow-col gap-3">
 
         {
-          summaryDates.map(date => (
-            <HabitDay
-              key={date.toString()}
-              amount={5}
-              completed={Math.round(Math.random() * 5)}
-            />
-          ))
+          summaryDates.map(date => {
+
+            const dayInSummary = summary.find(day => {
+              return dayjs(date).isSame(day.date, 'day')
+            })
+
+            return (
+              <HabitDay
+                key={date.toString()}
+                date={date}
+                amount={dayInSummary?.amount}
+                completed={dayInSummary?.completed}
+              />
+            )
+          })
         }
 
         {amountOfDaysToFill && Array.from({ length: amountOfDaysToFill }).map((_, index) => (
