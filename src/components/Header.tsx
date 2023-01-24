@@ -1,7 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog'
-
-import logoImage from '../assets/logo.svg'
 import { Plus, X } from 'phosphor-react'
+import logoImage from '../assets/logo.svg'
 
 import { NewHabitForm } from './NewHabitForm'
 
@@ -14,9 +13,9 @@ export function Header() {
       <Dialog.Root>
         <Dialog.Trigger
           type='button'
-          className='flex items-center gap-2 border border-violet-500 font-semibold rounded-lg px-6 py-4 hover:border-violet-300'
+          className='flex items-center gap-2 border-4 border-violet-500 font-semibold rounded-lg px-6 py-4 hover:border-violet-300'
         >
-          <Plus size={20} className="text-violet-500" />
+          <Plus size={20} className="text-violet-400" />
           Novo hábito
         </Dialog.Trigger>
 

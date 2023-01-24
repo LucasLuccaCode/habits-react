@@ -1,6 +1,8 @@
 import dayjs from "dayjs";
 import { generateDatesFromYearBeginning } from "../utils/generate-dates-from-year-beginning"
+
 import { HabitDay } from "./HabitDay"
+import { HabitFill } from "./HabitFill";
 
 interface SummaryTableProps {
   summary: {
@@ -18,7 +20,7 @@ export function SummaryTable({ summary }: SummaryTableProps) {
   const summaryDates = generateDatesFromYearBeginning()
 
   const minimumSummaryDatesSize = 18 * 7 // 18 weeks
-  const amountOfDaysToFill = minimumSummaryDatesSize - summaryDates.length
+  const amountOfDaysToFill = Math.max((minimumSummaryDatesSize - summaryDates.length), 0)
 
   return (
     <div className="w-full flex">
@@ -36,25 +38,28 @@ export function SummaryTable({ summary }: SummaryTableProps) {
       <div className="grid grid-rows-7 grid-flow-col gap-3">
 
         {
-          summary.length && summaryDates.map(date => {
+          summaryDates?.map(date => {
 
-            const dayInSummary = summary.find(day => {
-              return dayjs(date).isSame(day.date, 'day')
-            })
+            const dayInSummary = summary.find(
+              day => dayjs(date).isSame(day.date, 'day')
+            )
+
+            const amount = dayInSummary?.amount || 0
+            const defaultCompleted = dayInSummary?.completed || 0
 
             return (
               <HabitDay
-                key={date.toString()}
+                key={date.toISOString()}
                 date={date}
-                amount={dayInSummary?.amount}
-                defaultCompleted={dayInSummary?.completed}
+                amount={amount}
+                defaultCompleted={defaultCompleted}
               />
             )
           })
         }
 
         {amountOfDaysToFill && Array.from({ length: amountOfDaysToFill }).map((_, index) => (
-          <div key={index} className="w-10 h-10 bg-zinc-900 border-2 border-zinc-800 rounded-lg opacity-40 cursor-not-allowed" />
+          <HabitFill key={index} index={index} />
         ))}
 
       </div>

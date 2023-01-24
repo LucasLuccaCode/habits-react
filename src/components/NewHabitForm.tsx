@@ -2,7 +2,7 @@ import { FormEvent, useState } from "react";
 import { Check } from "phosphor-react";
 
 import * as Checkbox from "@radix-ui/react-checkbox";
-import { api } from "../services/api";
+import { api } from "../lib/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function NewHabitForm() {
@@ -18,7 +18,7 @@ export function NewHabitForm() {
     {
       retry: false,
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['summary'] })
+        queryClient.invalidateQueries()
         setTitle("")
         setWeekDays([])
       },
